@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken'
 import asyncHandler from 'express-async-handler'
-import Admin from '../models/adminModel'
 
 const protect = asyncHandler(async(req,res,next)=>{
     let token
@@ -10,7 +9,7 @@ const protect = asyncHandler(async(req,res,next)=>{
         try {
             const decoded = jwt.verify(token,process.env.JWT_SECRET_ADMIN)
             next()
-        } catch (error) {
+        } catch (error) { 
             res.status(401);
             throw new Error("Not Authorized ,invalid token")
         }
