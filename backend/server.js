@@ -1,6 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import userRoutes from './routes/userRoute.js'
+import adminRoute from './routes/adminRoute.js'
 import { notFound,errorHandler } from './middleware/errorMiddleware.js'
 import connectDB from './config/db.js'
 dotenv.config()
@@ -13,6 +14,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 app.use('/api/users',userRoutes)
+app.use('/api/users',adminRoute)
+
 app.get('/',(req,res)=>res.send('Server started'))
 
 app.use(notFound) 
