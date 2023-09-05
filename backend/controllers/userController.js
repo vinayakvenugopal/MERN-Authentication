@@ -28,8 +28,8 @@ const authUser = asyncHandler(async(req,res) =>{
 //@access Public
 
 const registerUser = asyncHandler(async(req,res) =>{
-    const {name,email,password} = req.body
     console.log(req.body);
+    const {name,email,password} = req.body
     const userExist = await User.findOne({email})
     if(userExist){
         res.status(400);

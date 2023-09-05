@@ -5,11 +5,10 @@ import { FormContainer } from "../components/FormContainer";
 import {useDispatch,useSelector} from 'react-redux'
 import {toast} from 'react-toastify'
 import Loader from "../components/Loader";
-import { useRegisterMutation } from "../slices/userApiSlice";
 import {setCredentials} from '../slices/authSlice'
+import { useUpdateUserMutation } from "../slices/userApiSlice";
 
-
-export const RegisterScreen = () => {
+export const ProfileScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,17 +18,14 @@ export const RegisterScreen = () => {
   const dispatch = useDispatch();
 
   const { userInfo } = useSelector( (state) => state.auth );
-  const [register, { isLoading }] = useRegisterMutation()
+
+  const [updateUserProfile,{isLoading}] = useUpdateUserMutation()
 
 
   useEffect( () => {
-
-    if(userInfo) {
-
-      navigate('/');
-
-    }
-  }, [ navigate, userInfo ] );
+    setName(userInfo.name)
+    setEmail(userInfo.email)
+  }, [userInfo.setName,userInfo.setEmail ] );
 
 
   const submitHandler = async (e) => {
@@ -37,14 +33,20 @@ export const RegisterScreen = () => {
     if(password !== confPassword){
       toast.error('Password Do Not Matxh')
     }else{
-      try {
-      const responseFromApiCall = await register( { name,email, password } ).unwrap();
-      dispatch( setCredentials( { ...responseFromApiCall } ) );
-      navigate('/');
+        try {
+     const responseFromApiCall = await updateUserProfile( { 
+        _id:userInfo._id,
+        name,
+        email,
+        password
+      }).unwrap();
+      dispatch(setCredentials({...responseFromApiCall}))
+      toast.success('Prfile Updated Succesfully')
+        } catch (err) {
+            toast.error( err?.data?.message || err?.error );
 
-      } catch (err) {
-        toast.error( err?.data?.message || err?.error );
-      }
+        }
+   
     }
    
   };
@@ -105,17 +107,11 @@ export const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        { isLoading && <> <Loader/> </>}
-
         <Button type="submit" variant="primary" className="mt-3">
-            SignIn
+            Update
         </Button>
 
-        <Row className="py-3">
-        <Col>
-            Already Have an account? <Link to='/login'>Log In</Link>
-        </Col>
-        </Row>
+      
       </Form>
     </FormContainer>
   );
