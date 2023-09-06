@@ -16,18 +16,47 @@ import HomeScreen from "./screens/HomeScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { RegisterScreen } from "./screens/RegisterScreen";
 import { ProfileScreen } from "./screens/ProfileScreen";
+import { AdminHomeScreen } from "./screens/adminScreens/AdminHomeScreen";
+import AdminLoginScreen from "./screens/adminScreens/AdminLoginScreen";
+import { UserManagementScreen } from "./screens/adminScreens/UserManagementScreen";
+import AdminPrivateRoute from "./components/adminComponents/AdminPrivate";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+
       <Route index={true} path="/" element={<HomeScreen />} />
+
       <Route path="/login" element={<LoginScreen />} />
+
       <Route path="/register" element={<RegisterScreen />} />
+
       {/* Private Routes */}
       <Route path="" element={<PrivateRoute />}>
+
         <Route path="/profile" element={<ProfileScreen />} />
+
       </Route>
+
+      // ***********************************Admin Routes*******************************************
+  
+  
+      <Route path="/admin" element={<AdminHomeScreen />} />
+      <Route path="/admin/login" element={<AdminLoginScreen />} />
+
+
+      {/* Private Routes */}
+
+      <Route path="/admin/get-user" element={<UserManagementScreen/>} />
+
+
+
     </Route>
+    
+
+
+
+
   )
 );
 ReactDOM.createRoot(document.getElementById("root")).render(
