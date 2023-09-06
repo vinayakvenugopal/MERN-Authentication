@@ -14,28 +14,19 @@ export const UserManagementScreen = () => {
     try {
 
       const fetchData = async () => {
-
-
-
         const responseFromApiCall = await userDataFromApi();
-
         const usersArray = responseFromApiCall.data;
-  
         setUsersData(usersArray);
-
       };
   
       fetchData();
-
     } catch (error) {
-
       toast.error(error);
-
       console.error("Error fetching users:", error);
 
     }
 
-  }, []);
+  }, [usersData]);
 
   return (
     <>

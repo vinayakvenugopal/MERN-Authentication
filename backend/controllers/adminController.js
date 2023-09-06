@@ -8,10 +8,8 @@ import User from '../models/userModel.js'
 //@access Public
 
 const authAdmin = asyncHandler(async(req,res) =>{
-    console.log('Hi');
     const {email,password} = req.body
     const admin = await Admin.findOne({email})
-    console.log(admin);
     if(admin.password === password){
         generateAdminToken(res,admin._id)
         res.status(201).json({
@@ -46,7 +44,7 @@ const logoutAdmin = async (req,res) =>{
 
 
 const getAllUser = asyncHandler(async(req,res) => {
-    const userData =  await User.find({}, { name: 1, email: 1 })
+    const userData =  await User.find({}, { name: 1, email: 1 ,profileImageName:1})
     if(userData){
         res.status(200).json(userData)
     }else{
@@ -66,6 +64,7 @@ const updateUserData = asyncHandler(async(req,res) => {
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
     const updatedUser = await user.save();
+
     res.status(200).json({
         _id:updatedUser._id,
         name:updatedUser.name,

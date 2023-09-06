@@ -13,7 +13,9 @@ const authUser = asyncHandler(async(req,res) =>{
         res.status(201).json({
             _id:user._id,
             name:user.name,
-            email:user.email
+            email:user.email,
+            profileImageName:user.profileImageName
+
         })
     }else{
         res.status(401)
@@ -45,7 +47,9 @@ const registerUser = asyncHandler(async(req,res) =>{
         res.status(201).json({
             _id:user._id,
             name:user.name,
-            email:user.email
+            email:user.email,
+            profileImageName:user.profileImageName
+
         })
     }else{
         res.status(400)
@@ -83,9 +87,8 @@ const getUserProfile = async (req,res) =>{
 //@access Private
 
 const updateUserProfile = async (req,res) =>{
-    const user = await User.findById(req.user._id)
-    console.log(user);
-
+const user = await User.findById(req.user._id)
+console.log(user);
     if(user){
         user.name = req.body.name || user.name
         user.email = req.body.email || user.email
@@ -95,13 +98,21 @@ const updateUserProfile = async (req,res) =>{
         user.password = req.body.password
     }
 
+    if(req.file){
+
+        user.profileImageName = req.file.filename || user.profileImageName;
+
+    }
+
     const updatedUser = await user.save();
 
 
     res.status(200).json({
         _id:updatedUser._id,
         name:updatedUser.name,
-        email:updatedUser.email
+        email:updatedUser.email,
+        profileImageName:updatedUser.profileImageName
+
     })
 }else{
     res.status(404)

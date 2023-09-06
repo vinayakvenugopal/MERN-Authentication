@@ -7,12 +7,14 @@ import {toast} from 'react-toastify'
 import Loader from "../components/Loader";
 import {setCredentials} from '../slices/authSlice'
 import { useUpdateUserMutation } from "../slices/userApiSlice";
-
+const PROFILE_IMAGE_DIR_PATH = 'http://localhost:5000/UserProfileImages/'
 export const ProfileScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setConfPassword] = useState("");
+  const [profileImageName, setProfileImageName] = useState("");
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,26 +27,29 @@ export const ProfileScreen = () => {
   useEffect( () => {
     setName(userInfo.name)
     setEmail(userInfo.email)
-  }, [userInfo.setName,userInfo.setEmail ] );
+    setProfileImageName(userInfo.profileImageName)
+  }, [userInfo.setName,userInfo.setEmail,userInfo.profileImageName ] );
 
 
-  const submitHandler = async (e) => {
+  const submitHandler = async (e) => {  
     e.preventDefault();
     if(password !== confPassword){
       toast.error('Password Do Not Matxh')
     }else{
         try {
-     const responseFromApiCall = await updateUserProfile( { 
-        _id:userInfo._id,
-        name,
-        email,
-        password
-      }).unwrap();
+          const formData = new FormData();
+
+          formData.append('name', name);
+          formData.append('email', email);
+          formData.append('password', password);
+          formData.append('profileImageName', profileImageName);
+          console.log(formData);
+      const responseFromApiCall = await updateUserProfile(formData).unwrap();
+      console.log(responseFromApiCall);
       dispatch(setCredentials({...responseFromApiCall}))
       toast.success('Prfile Updated Succesfully')
         } catch (err) {
             toast.error( err?.data?.message || err?.error );
-
         }
    
     }
@@ -52,7 +57,23 @@ export const ProfileScreen = () => {
   };
   return (
     <FormContainer>
-      <h1>Sign Up</h1>
+          {userInfo.profileImageName && (
+        <img
+          src={PROFILE_IMAGE_DIR_PATH + userInfo.profileImageName}
+          alt={userInfo.name}
+          style={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            display: "block",
+            marginTop: "5px",
+            marginLeft: "115px",
+            marginBottom: "10px",
+          }}
+        />
+      )}
+      <h1>Update Details</h1>
       <Form onSubmit={submitHandler}>
 
       <Form.Group className="my-2" controlId="name">
@@ -77,15 +98,7 @@ export const ProfileScreen = () => {
         </Form.Group>
 
 
-        {/* <Form.Group className="my-2" controlId="email">
-            <Form.Label>Email Address</Form.Label>
-            <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            ></Form.Control>
-            </Form.Group> */}
+    
 
         <Form.Group className="my-2" controlId="password">
           <Form.Label>Password</Form.Label>
@@ -106,6 +119,14 @@ export const ProfileScreen = () => {
             onChange={(e) => setConfPassword(e.target.value)}
           ></Form.Control>
         </Form.Group>
+
+        <Form.Group className="my-2" controlId="profileImage">
+              <Form.Label>Profile Picture</Form.Label>
+              <Form.Control
+                type="file"
+                onChange={(e) => setProfileImageName(e.target.files[0])}
+              ></Form.Control>
+            </Form.Group>
 
         <Button type="submit" variant="primary" className="mt-3">
             Update

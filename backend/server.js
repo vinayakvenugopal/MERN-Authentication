@@ -13,6 +13,11 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
+
+// ===================== Setting Static Folder =====================
+app.use(express.static('backend/Public'));
+
+
 app.use('/api/users',userRoutes)
 app.use('/api/admin',adminRoute)
 

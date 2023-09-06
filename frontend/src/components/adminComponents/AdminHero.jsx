@@ -13,7 +13,7 @@ const AdminHero = () => {
             Bootstrap library
           </p>
           <div className='d-flex'>
-          <LinkContainer to='admin/login' >
+          <LinkContainer to='/admin/login' >
             <Button variant='primary' className='me-3'>
               Sign In
             </Button>

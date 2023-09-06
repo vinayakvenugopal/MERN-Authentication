@@ -21,15 +21,15 @@ export const AdminLoginScreen = () => {
 
   const { adminInfo } = useSelector( (state) => state.adminAuth );
 
-  // useEffect( () => {
+  useEffect( () => {
 
-  //   if(adminInfo) {
+    if(adminInfo) {
 
-  //     navigate('/admin/get-user');
+      navigate('/admin/get-user');
 
-  //   }
+    }
 
-  // }, [] );
+  }, [adminInfo,navigate] );
 
   const submitHandler = async (e) => {
 

@@ -25,7 +25,7 @@ export const LoginScreen = () => {
 
     if(userInfo) {
 
-      navigate('/');
+      navigate('/profile');
 
     }
 

@@ -5,14 +5,21 @@ import { useGetUserDataMutation } from '../../slices/adminApiSlice'
 import { useAdminUpdateUserMutation } from '../../slices/adminApiSlice';
 import { toast } from "react-toastify";
 import { useDeleteUserDataMutation } from '../../slices/adminApiSlice';
+const PROFILE_IMAGE_DIR_PATH = 'http://localhost:5000/UserProfileImages/'
 
 export const UsersTable = ({users}) => {
+  console.log(users);
       const [searchQuery, setSearchQuery] = useState("");
     const [userIdToUpdate,setUserIdToUpdate] = useState('')
     const [userNameToUpdate,setUserNameToUpdate] = useState('')
     const [userEmailToUpdate,setUserEmailToUpdate] = useState('')
     const [showUpdateModal,setShowUpdateModal] = useState(false)
 
+
+    const [showRegisterModal,setShowURegisterModal] = useState(true)
+    const [name,setName] = useState('')
+    const [email,setEmail] = useState('')
+    const [password,setPassword] = useState('')
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
@@ -58,14 +65,10 @@ export const UsersTable = ({users}) => {
             name: userNameToUpdate,
             email: userEmailToUpdate
           });
-          console.log(responseFromApiCall);
           toast.success("User Updated Successfully.");
           setUserIdToUpdate(null); // Clear the user ID to update
           setShowUpdateModal(false); // Close the update modal   
     
-          // Reload the page to reflect the updated data
-          window.location.reload();
-          
         } catch (err) {
           toast.error(err?.data?.message || err?.error);
         }
@@ -96,12 +99,13 @@ export const UsersTable = ({users}) => {
     <MDBTableBody>
     {filteredUsers.map((item, index) => (
       
+      
       <tr key={index}>
         <td>
           <div className='d-flex align-items-center'>
             <img
-              src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-              alt=''
+              src={PROFILE_IMAGE_DIR_PATH+item.profileImageName}
+              alt={item.name}
               style={{ width: '45px', height: '45px' }}
               className='rounded-circle'
             />
@@ -158,6 +162,59 @@ export const UsersTable = ({users}) => {
         value={userEmailToUpdate}
         onChange={(e) =>
             setUserEmailToUpdate(e.target.value)
+        }
+      />
+    </BootstrapForm.Group>
+  </BootstrapForm>
+</Modal.Body>
+<Modal.Footer>
+  <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
+    Cancel
+  </Button>
+  <Button variant="primary"
+   onClick={handleUpdate} disabled={isUpdating}
+   >
+    {isUpdating ? "Updating..." : "Update"}
+  </Button>
+</Modal.Footer>
+</Modal>
+
+
+
+<Modal show={showRegisterModal} onHide={() => setShowURegisterModal(false)}>
+<Modal.Header closeButton>
+  <Modal.Title>Register New User</Modal.Title>
+</Modal.Header>
+<Modal.Body>
+  <BootstrapForm>
+    <BootstrapForm.Group controlId="name">
+      <BootstrapForm.Label>Name</BootstrapForm.Label>
+      <BootstrapForm.Control
+        type="text"
+        value={name}
+        onChange={(e) =>
+            setName(e.target.value)
+        }
+      />
+    </BootstrapForm.Group>
+    <BootstrapForm.Group controlId="email">
+      <BootstrapForm.Label>Email</BootstrapForm.Label>
+      <BootstrapForm.Control
+        type="email"
+        value={email}
+        onChange={(e) =>
+            setEmail(e.target.value)
+        }
+      />
+    </BootstrapForm.Group>
+
+    <BootstrapForm.Group controlId="email">
+      <BootstrapForm.Label>Password</BootstrapForm.Label>
+      <BootstrapForm.Control
+        type="password"
+        value={password}
+        onChange={(e) =>
+            setPassword(e.target.value)
         }
       />
     </BootstrapForm.Group>
