@@ -6,20 +6,21 @@ import { useAdminUpdateUserMutation } from '../../slices/adminApiSlice';
 import { toast } from "react-toastify";
 import { useDeleteUserDataMutation } from '../../slices/adminApiSlice';
 const PROFILE_IMAGE_DIR_PATH = 'http://localhost:5000/UserProfileImages/'
+import { RegisterModal } from './RegisterModal';
 
-export const UsersTable = ({users}) => {
+
+export const UsersTable = ({users,refetchData}) => {
   console.log(users);
-      const [searchQuery, setSearchQuery] = useState("");
+    const [showRegisterModal,setShowURegisterModal] = useState(false)
+    const [searchQuery, setSearchQuery] = useState("");
     const [userIdToUpdate,setUserIdToUpdate] = useState('')
     const [userNameToUpdate,setUserNameToUpdate] = useState('')
     const [userEmailToUpdate,setUserEmailToUpdate] = useState('')
     const [showUpdateModal,setShowUpdateModal] = useState(false)
 
-
-    const [showRegisterModal,setShowURegisterModal] = useState(true)
-    const [name,setName] = useState('')
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+  const closeRegisterModal = () => {
+    setShowURegisterModal(false)
+  }
 
     const handleSearch = (event) => {
         setSearchQuery(event.target.value);
@@ -52,6 +53,7 @@ export const UsersTable = ({users}) => {
         })
         console.log(responseFromApiCall);
         toast.success("User Deleted Succesfully")
+        refetchData()
     } catch (err) {
         toast.error(err?.data?.message || err?.error);
       }
@@ -68,7 +70,7 @@ export const UsersTable = ({users}) => {
           toast.success("User Updated Successfully.");
           setUserIdToUpdate(null); // Clear the user ID to update
           setShowUpdateModal(false); // Close the update modal   
-    
+          refetchData()
         } catch (err) {
           toast.error(err?.data?.message || err?.error);
         }
@@ -86,6 +88,11 @@ export const UsersTable = ({users}) => {
             onChange={handleSearch}
           />
         </BootstrapForm.Group>
+        <Button color='link'size='sm'
+             onClick={() => setShowURegisterModal(true)}
+           >
+            Add User
+          </Button>
       </BootstrapForm>
     <MDBTable align='middle'>
     <MDBTableHead>
@@ -178,59 +185,13 @@ export const UsersTable = ({users}) => {
   </Button>
 </Modal.Footer>
 </Modal>
+{showRegisterModal && 
+<RegisterModal 
+showModal={showRegisterModal}
+closeModal={closeRegisterModal}
+refetchData={refetchData}
 
-
-
-<Modal show={showRegisterModal} onHide={() => setShowURegisterModal(false)}>
-<Modal.Header closeButton>
-  <Modal.Title>Register New User</Modal.Title>
-</Modal.Header>
-<Modal.Body>
-  <BootstrapForm>
-    <BootstrapForm.Group controlId="name">
-      <BootstrapForm.Label>Name</BootstrapForm.Label>
-      <BootstrapForm.Control
-        type="text"
-        value={name}
-        onChange={(e) =>
-            setName(e.target.value)
-        }
-      />
-    </BootstrapForm.Group>
-    <BootstrapForm.Group controlId="email">
-      <BootstrapForm.Label>Email</BootstrapForm.Label>
-      <BootstrapForm.Control
-        type="email"
-        value={email}
-        onChange={(e) =>
-            setEmail(e.target.value)
-        }
-      />
-    </BootstrapForm.Group>
-
-    <BootstrapForm.Group controlId="email">
-      <BootstrapForm.Label>Password</BootstrapForm.Label>
-      <BootstrapForm.Control
-        type="password"
-        value={password}
-        onChange={(e) =>
-            setPassword(e.target.value)
-        }
-      />
-    </BootstrapForm.Group>
-  </BootstrapForm>
-</Modal.Body>
-<Modal.Footer>
-  <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
-    Cancel
-  </Button>
-  <Button variant="primary"
-   onClick={handleUpdate} disabled={isUpdating}
-   >
-    {isUpdating ? "Updating..." : "Update"}
-  </Button>
-</Modal.Footer>
-</Modal>
+/>}
 
 </>
   )

@@ -8,7 +8,8 @@ import {
     logoutAdmin,
     getAllUser,
     updateUserData,
-    deleteUser
+    deleteUser,
+    addNewUser
 }from '../controllers/adminController.js'
 
 
@@ -17,6 +18,7 @@ router.post('/logout',logoutAdmin)
 router.post('/get-user',getAllUser)
 router.put('/update-user',updateUserData)
 router.delete('/delete-user',deleteUser)
+router.post('/add-user',addNewUser)
 
 
 

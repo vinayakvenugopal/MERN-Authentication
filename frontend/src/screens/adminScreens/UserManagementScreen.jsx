@@ -5,6 +5,11 @@ import { useAdminUpdateUserMutation } from '../../slices/adminApiSlice'
 
 export const UserManagementScreen = () => {
   const [usersData, setUsersData] = useState([])
+  const [refetch,setRefetch] = useState(false)
+
+  const refetchData = ()=>{
+    setRefetch(!refetch)
+  }
 
   const [userDataFromApi, { isLoading }] = useGetUserDataMutation();
 
@@ -26,11 +31,13 @@ export const UserManagementScreen = () => {
 
     }
 
-  }, [usersData]);
+  }, [refetch]);
 
   return (
     <>
-        <UsersTable users={usersData}/>
+        <UsersTable users={usersData} 
+          refetchData = {refetchData}
+        />
     </>
   )
 }
