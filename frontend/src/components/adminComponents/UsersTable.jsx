@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { MDBBadge, MDBBtn, MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { AiFillDelete,AiFillEdit } from "react-icons/ai";
 import {Button,Modal,Form as BootstrapForm} from 'react-bootstrap'
 import { useGetUserDataMutation } from '../../slices/adminApiSlice'
 import { useAdminUpdateUserMutation } from '../../slices/adminApiSlice';
@@ -7,7 +8,7 @@ import { toast } from "react-toastify";
 import { useDeleteUserDataMutation } from '../../slices/adminApiSlice';
 const PROFILE_IMAGE_DIR_PATH = 'http://localhost:5000/UserProfileImages/'
 import { RegisterModal } from './RegisterModal';
-
+import './userTable.css'
 
 export const UsersTable = ({users,refetchData}) => {
   console.log(users);
@@ -77,6 +78,8 @@ export const UsersTable = ({users,refetchData}) => {
       }
   return (
     <>
+    <div className='containerS'>
+    <div>
      <BootstrapForm>
         <BootstrapForm.Group className="mt-3" controlId="exampleForm.ControlInput1">
           <BootstrapForm.Label>Search users:</BootstrapForm.Label>
@@ -88,12 +91,18 @@ export const UsersTable = ({users,refetchData}) => {
             onChange={handleSearch}
           />
         </BootstrapForm.Group>
-        <Button color='link'size='sm'
+       
+      </BootstrapForm>
+      </div>
+      <div className='right'> 
+      <Button className="dark-button" size='sm'
              onClick={() => setShowURegisterModal(true)}
            >
             Add User
           </Button>
-      </BootstrapForm>
+          </div>
+    </div>
+
     <MDBTable align='middle'>
     <MDBTableHead>
       <tr>
@@ -125,17 +134,17 @@ export const UsersTable = ({users,refetchData}) => {
           <p className='fw-normal mb-1'>{item.email}</p>
           </td>
           <td>
-          <Button color='link' size='sm'
+          <Button  variant="transparent" size='sm'
              onClick={() => handleOpenUpdateModal(item)}
            >
-            Edit
+            <AiFillEdit/>
           </Button>
         </td>
         <td>
-          <Button color='link'size='sm'
+          <Button  variant="transparent"size='sm'
              onClick={() => handleDelete(item)}
            >
-            Delete
+            <AiFillDelete/>
           </Button>
         </td>
        

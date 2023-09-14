@@ -38,7 +38,7 @@ const router = createBrowserRouter(
 
       </Route>
 
-      // ***********************************Admin Routes*******************************************
+      // ***********************************Admin Routes*******************************************//
   
   
       <Route path="/admin" element={<AdminHomeScreen />} />
@@ -46,8 +46,11 @@ const router = createBrowserRouter(
 
 
       {/* Private Routes */}
-
+      <Route path="" element={<AdminPrivateRoute/>}>
       <Route path="/admin/get-user" element={<UserManagementScreen/>} />
+      </Route>
+      {/* Private Routes */}
+
 
 
 

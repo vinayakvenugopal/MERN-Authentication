@@ -13,6 +13,21 @@ export const RegisterModal = ({showModal,closeModal,refetchData}) => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const nameRegex = /^[A-Za-z\s'-]+$/
+
+    if(!nameRegex.test(name)){
+      toast.error('Name is not valid')
+      return
+    }
+    if(!emailRegex.test(email)){
+      toast.error("Email Not Valid")
+      return
+    }
+    if(password.length===0){
+      toast.error('Password is Empty')
+      return
+    }
         try {
         const responseFromApiCall = await addUserByAdmin({
             name,

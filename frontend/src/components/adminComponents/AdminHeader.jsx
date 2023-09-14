@@ -33,9 +33,9 @@ const AdminHeader = () => {
             <Nav className='ms-auto'>
             {adminInfo ? (<>
               <NavDropdown title={adminInfo.email} id='username'>
-                <LinkContainer to='/profile'>
+                <LinkContainer to='/admin/get-user'>
                 <NavDropdown.Item>
-                Profile
+                Users List
                 </NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Item onClick={logoutHandler}>

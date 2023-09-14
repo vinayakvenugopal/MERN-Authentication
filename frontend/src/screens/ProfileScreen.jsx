@@ -32,7 +32,19 @@ export const ProfileScreen = () => {
 
 
   const submitHandler = async (e) => {  
+   
     e.preventDefault();
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const nameRegex = /^[A-Za-z\s'-]+$/
+
+    if(!nameRegex.test(name)){
+      toast.error('Name is not valid')
+      return
+    }
+    if(!emailRegex.test(email)){
+      toast.error("Email Not Valid")
+      return
+    }
     if(password !== confPassword){
       toast.error('Password Do Not Matxh')
     }else{
